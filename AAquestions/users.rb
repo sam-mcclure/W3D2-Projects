@@ -52,4 +52,28 @@ class User
   def liked_questions
     QuestionLike.liked_questions_for_user_id(@id)
   end
+  
+  def average_karma_wrong
+    likes = self.authored_questions.map { |question| question.num_likes }
+    likes.reduce(:+).to_f / likes.length
+  end 
+  
+  def average_karma_right
+    questions_and_likes = self.number_of_questions_and_likes[0]
+    questions_and_likes['number_of_likes'].to_f / questions_and_likes['number_of_questions']
+  end
+  
+  def number_of_questions_and_likes
+    QuestionDatabase.instance.execute(<<-SQL, @id)
+      SELECT
+        COUNT(DISTINCT(questions.id)) AS number_of_questions, COUNT(question_like.user_id) AS number_of_likes
+      FROM 
+        questions
+        LEFT OUTER JOIN
+          question_like
+          ON questions.id = question_like.question_id
+      WHERE
+        questions.user_id = ?
+    SQL
+  end
 end 

@@ -53,13 +53,15 @@ INSERT INTO
   users(fname, lname)
 VALUES 
   ('Tim', 'Song'),
-  ('Sam', 'McClure');
+  ('Sam', 'McClure'),
+  ('Mike', 'Gee');
 
 INSERT INTO 
   questions(title, body, user_id)
 VALUES
   ('Question1', 'Lorem ipsum dolor sit amet', 1),
-  ('Question2', 'I don''t know', 2);
+  ('Question2', 'I don''t know', 2),
+  ('Question3', 'What don''t I know', 2);
 
 INSERT INTO 
   question_follows(user_id, question_id)
@@ -80,6 +82,10 @@ VALUES
 INSERT INTO 
   question_like(user_id, question_id)
 VALUES 
-  (2, 1),
-  (1, 2);
+  (1, 1),
+  (1, 2),
+  (2, 2),
+  (3, 2),
+  (2, 3),
+  (3, 3);
   
