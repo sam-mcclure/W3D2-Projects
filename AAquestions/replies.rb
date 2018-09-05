@@ -60,6 +60,27 @@ class Reply
     @body = options['body']
   end
   
+  def save 
+    if @id.nil?
+      QuestionDatabase.instance.execute(<<-SQL, @question_id, @parent_id, @user_id, @body)
+        INSERT INTO 
+          replies(question_id, parent_id, user_id, body)
+        VALUES
+          (?, ?, ?, ?)
+      SQL
+      @id = QuestionDatabase.instance.last_insert_row_id
+    else 
+      QuestionDatabase.instance.execute(<<-SQL, @question_id, @parent_id, @user_id, @body, @id)
+        UPDATE 
+          replies
+        SET
+          question_id = ?, parent_id = ?, user_id = ?, body = ?
+        WHERE 
+          id = ?
+      SQL
+    end  
+  end
+  
   def author 
     User.find_by_id(@user_id)
   end 
